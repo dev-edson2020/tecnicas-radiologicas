@@ -1,52 +1,68 @@
-<form (ngSubmit)="onSave()" #techniqueForm="ngForm" novalidate>
-  <!-- Nome da Técnica -->
-  <div class="form-group">
-    <label for="nameInput">Nome</label>
-    <input id="nameInput" type="text" [(ngModel)]="newTechnique.name" name="name" required autofocus />
-  </div>
+<div class="modal-overlay">
+  <div class="modal-container">
+    <!-- Cabeçalho -->
+    <div class="modal-header">
+      <h2 class="modal-title">Adicionar Técnica</h2>
+      <button class="close-btn" (click)="onClose()">×</button>
+    </div>
 
-  <!-- Categoria -->
-  <div class="form-group">
-    <label for="categorySelect">Categoria</label>
-    <select id="categorySelect" [(ngModel)]="selectedCategoryId" name="category" required>
-      <option *ngFor="let cat of categories" [value]="cat.id">
-        {{ cat.name }}
-      </option>
-    </select>
-  </div>
+    <!-- Formulário -->
+    <form #techniqueForm="ngForm" (ngSubmit)="onSave(techniqueForm)" novalidate class="modal-body">
+      <!-- Erro geral só após tentativa de submit -->
+      <div class="validation-error" *ngIf="submitted && !techniqueForm.valid">
+        Por favor, preencha todos os campos corretamente (máx. 4 caracteres).
+      </div>
 
-  <!-- kV -->
-  <div class="form-group">
-    <label for="kvInput">kV</label>
-    <input id="kvInput" type="number" [(ngModel)]="newTechnique.kv" name="kv" min="1" required />
-  </div>
+      <!-- Nome -->
+      <div class="form-group">
+        <label for="nameInput" class="input-label">Nome</label>
+        <input #nameInput id="nameInput" type="text" class="form-input" name="name" [(ngModel)]="newTechnique.name" />
+      </div>
 
-  <!-- mAs -->
-  <div class="form-group">
-    <label for="masInput">mAs</label>
-    <input id="masInput" type="number" [(ngModel)]="newTechnique.mas" name="mas" min="1" required />
-  </div>
+      <!-- Categoria -->
+      <div class="form-group">
+        <label for="categorySelect" class="input-label">Categoria</label>
+        <select id="categorySelect" class="form-select" name="category" [(ngModel)]="selectedCategoryId" required>
+          <option value="" disabled selected>Selecione...</option>
+          <option *ngFor="let cat of categories" [ngValue]="cat.id">
+            {{ cat.name }}
+          </option>
+        </select>
+      </div>
 
-  <!-- mA -->
-  <div class="form-group">
-    <label for="maInput">mA</label>
-    <input id="maInput" type="number" [(ngModel)]="newTechnique.ma" name="ma" min="1" required />
-  </div>
+      <!-- Grid de Parâmetros -->
+      <div class="parameters-grid">
+        <div class="form-group">
+          <label for="kvInput" class="input-label">kV</label>
+          <input id="kvInput" type="number" class="form-input" name="kv" [(ngModel)]="newTechnique.kv" required min="0"
+            max="9999" />
+        </div>
+        <div class="form-group">
+          <label for="masInput" class="input-label">mAs</label>
+          <input id="masInput" type="number" class="form-input" name="mas" [(ngModel)]="newTechnique.mas" required
+            min="0" max="9999" />
+        </div>
+        <div class="form-group">
+          <label for="maInput" class="input-label">mA</label>
+          <input id="maInput" type="number" class="form-input" name="ma" [(ngModel)]="newTechnique.ma" required min="0"
+            max="9999" />
+        </div>
+        <div class="form-group">
+          <label for="distanceInput" class="input-label">Distância</label>
+          <input id="distanceInput" type="number" class="form-input" name="distance" [(ngModel)]="newTechnique.distance"
+            required min="0" max="9999" />
+        </div>
+      </div>
 
-  <!-- Distância -->
-  <div class="form-group">
-    <label for="distanceInput">Distância</label>
-    <input id="distanceInput" type="number" [(ngModel)]="newTechnique.distance" name="distance" min="1" required />
+      <!-- Rodapé com botões -->
+      <div class="modal-footer">
+        <button type="button" class="cancel-btn" (click)="onClose()">
+          Cancelar
+        </button>
+        <button type="submit" class="add-btn" [disabled]="!techniqueForm.valid">
+          Salvar
+        </button>
+      </div>
+    </form>
   </div>
-
-  <!-- Mensagem de erro geral -->
-  <div class="validation-error" *ngIf="!isFormValid()">
-    Por favor, preencha todos os campos corretamente.
-  </div>
-
-  <!-- Botões -->
-  <div class="buttons">
-    <button type="submit" [disabled]="!isFormValid()">Salvar</button>
-    <button type="button" (click)="close.emit()">Cancelar</button>
-  </div>
-</form>
+</div>
