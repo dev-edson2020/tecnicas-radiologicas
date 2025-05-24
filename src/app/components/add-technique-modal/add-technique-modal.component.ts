@@ -1,21 +1,23 @@
-import { Component, EventEmitter, Output, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  ViewChild,
+  ElementRef,
+  AfterViewInit
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon'; 
-
-interface Technique {
-  name: string;
-  category: string;
-  kV: number | null;
-  mAs: number | null;
-  mA: number | null;
-  distance: number | null;
-}
+import { MatIconModule } from '@angular/material/icon';
+import { TechniqueService } from '../../services/technique.service';
+import { Category } from '../../models/category';
+import { Technique } from '../../models/technique.';
+import { CategoryService } from '../../services/category.service';
 
 @Component({
   selector: 'app-add-technique-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatIconModule], 
+  imports: [CommonModule, FormsModule, MatIconModule],
   templateUrl: './add-technique-modal.component.html',
   styleUrls: ['./add-technique-modal.component.scss']
 })
@@ -24,47 +26,85 @@ export class AddTechniqueModalComponent implements AfterViewInit {
   @Output() save = new EventEmitter<Technique>();
   @ViewChild('nameInput') nameInputRef!: ElementRef;
 
-  categories = [
-    { value: 'torax', label: 'Tórax' },
-    { value: 'membros-superiores', label: 'Membros Superiores' },
-    { value: 'membros-inferiores', label: 'Membros Inferiores' },
-    { value: 'coluna', label: 'Coluna' },
-    { value: 'cranio', label: 'Crânio' },
-    { value: 'abdome', label: 'Abdome' },
-    { value: 'bacia', label: 'Bacia' },
-    { value: 'especialidades', label: 'Especialidades' }
-  ];
+  categories: Category[] = [];
 
-  newTechnique: Technique = {
+  selectedCategoryId: number = 1;
+
+  newTechnique = {
     name: '',
-    category: 'torax',
-    kV: null,
-    mAs: null,
-    mA: null,
-    distance: null
+    kv: 0,
+    mas: 0,
+    ma: 0,
+    distance: 0
   };
 
-   ngAfterViewInit() {
-    setTimeout(() => {
-      this.nameInputRef?.nativeElement?.focus();
+  constructor(
+    private techniqueService: TechniqueService,
+    private categoryService: CategoryService
+  ) { }
+
+ ngAfterViewInit() {
+  setTimeout(() => {
+    this.nameInputRef?.nativeElement?.focus();
+  });
+
+  this.loadCategories(); // Carregar categorias ao abrir o modal
+}
+
+loadCategories(): void {
+  this.categoryService.getAll().subscribe({
+    next: (data) => {
+      this.categories = data;
+
+      if (this.categories.length > 0) {
+        this.selectedCategoryId = this.categories[0].id;
+      }
+    },
+    error: (err) => {
+      console.error('Erro ao carregar categorias:', err);
+    }
+  });
+}
+
+  onSave() {
+    if (!this.isFormValid()) {
+      this.showValidationError();
+      return;
+    }
+
+    const techniqueToSave: Technique = {
+      id: null,
+      name: this.newTechnique.name.trim(),
+      kv: this.newTechnique.kv,
+      mas: this.newTechnique.mas,
+      ma: this.newTechnique.ma,
+      distance: this.newTechnique.distance,
+      category: {
+        id: this.selectedCategoryId   // ESSENCIAL: enviar objeto com ID numérico
+      },
+      fullName: ''
+    };
+
+    this.techniqueService.addTechnique(techniqueToSave).subscribe({
+      next: (savedTechnique) => {
+        console.log('Técnica salva com sucesso:', savedTechnique);
+        this.save.emit(savedTechnique);
+        this.close.emit();
+      },
+      error: (err) => {
+        console.error('Erro ao salvar técnica:', err);
+      }
     });
   }
 
-  onSave() {
-    if (this.isFormValid()) {
-      this.save.emit({ ...this.newTechnique });
-    } else {
-      this.showValidationError();
-    }
-  }
 
-  private isFormValid(): boolean {
+  isFormValid(): boolean {
     return (
       this.newTechnique.name.trim() !== '' &&
-      this.newTechnique.kV !== null &&
-      this.newTechnique.mAs !== null &&
-      this.newTechnique.mA !== null &&
-      this.newTechnique.distance !== null
+      this.newTechnique.kv > 0 &&
+      this.newTechnique.mas > 0 &&
+      this.newTechnique.ma > 0 &&
+      this.newTechnique.distance > 0
     );
   }
 

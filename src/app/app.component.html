@@ -1,24 +1,38 @@
 <div class="app-container">
+  <!-- Navbar com evento que emite o id da técnica selecionada (number) -->
   <app-navbar (techniqueSelected)="showTechnique($event)"></app-navbar>
-  
+
   <div class="main-content">
+    <!-- Header com botão para abrir modal de adicionar técnica -->
     <app-header (addTechnique)="openAddTechniqueModal()"></app-header>
-    
-    <app-technique-card 
-      *ngIf="currentTechnique"
-      [technique]="currentTechnique"
-      (delete)="onDeleteTechnique($event)">
-    </app-technique-card>
-    
+
+    <!-- Exibe o card da técnica atual se existir -->
+    <ng-container *ngIf="currentTechnique; else noTechnique">
+      <app-technique-card 
+        [technique]="currentTechnique"
+        (delete)="onDeleteTechnique($event)">
+      </app-technique-card>
+    </ng-container>
+
+    <!-- Mensagem caso nenhuma técnica esteja selecionada -->
+    <ng-template #noTechnique>
+      <div class="no-technique">
+        <p>Nenhuma técnica selecionada.</p>
+      </div>
+    </ng-template>
+
+    <!-- Rodapé fixo -->
     <app-footer></app-footer>
   </div>
-  
+
+  <!-- Modal para adicionar nova técnica, exibido conforme flag -->
   <app-add-technique-modal 
     *ngIf="showAddModal"
     (close)="closeAddTechniqueModal()"
     (save)="addNewTechnique($event)">
   </app-add-technique-modal>
-  
+
+  <!-- Modal de confirmação para exclusão -->
   <app-confirm-modal 
     *ngIf="showConfirmModal"
     [message]="confirmMessage"
