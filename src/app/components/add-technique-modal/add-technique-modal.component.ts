@@ -29,7 +29,7 @@ export class AddTechniqueModalComponent implements AfterViewInit {
   nameInputRef!: ElementRef<HTMLInputElement>;
 
   categories: Category[] = [];
-  selectedCategoryId!: number;
+  selectedCategoryId: number | null = null;
 
   newTechnique: {
     name: string;
@@ -61,15 +61,14 @@ export class AddTechniqueModalComponent implements AfterViewInit {
     this.categoryService.getAll().subscribe({
       next: cats => {
         this.categories = cats;
-        if (cats.length) {
-          this.selectedCategoryId = cats[0].id;
-        }
+        // if (cats.length) {
+        //   this.selectedCategoryId = cats[0].id;
+        // }
       },
       error: err => console.error('Erro ao carregar categorias:', err)
     });
   }
 
-  // Agora recebe o form como argumento
   onSave(form: NgForm) {
     this.submitted = true;
 
