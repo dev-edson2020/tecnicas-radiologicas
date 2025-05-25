@@ -1,20 +1,22 @@
-<nav>
-  <div class="nav-header">
-    <i class="material-icons">medical_services</i>
-    <h2>Incidências</h2>
-  </div>
+<div class="sidebar">
+  <h3><mat-icon>add</mat-icon> Incidências</h3>
 
-  <ul>
-    <li *ngFor="let category of categories"
-        class="main-item"
-        (click)="toggleSubmenu(category.id!)"
-        [class.active]="openSubmenuId === category.id">
+  <ng-container *ngFor="let entry of techniquesByCategory | keyvalue">
+    <div 
+      class="menu-item" 
+      (click)="toggleCategory(entry.key)"
+      [class.expanded]="expandedCategory === entry.key"
+    >
+      {{ entry.key }}
+      <mat-icon>
+        {{ expandedCategory === entry.key ? 'expand_less' : 'chevron_right' }}
+      </mat-icon>
+    </div>
 
-      <span>{{ category.name }}</span>
-
-      <span class="material-icons arrow">
-        {{ openSubmenuId === category.id ? 'expand_more' : 'chevron_right' }}
-      </span>
-    </li>
-  </ul>
-</nav>
+    <ul *ngIf="expandedCategory === entry.key" class="submenu">
+      <li *ngFor="let technique of entry.value">
+        {{ technique.name }}
+      </li>
+    </ul>
+  </ng-container>
+</div>

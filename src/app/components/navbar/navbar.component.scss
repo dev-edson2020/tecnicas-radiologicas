@@ -1,86 +1,50 @@
-nav {
-  background-color: #003366;
+.sidebar {
+  background-color: #002b5c;
   color: white;
   padding: 1rem;
+  width: 250px;
+  height: 100vh;
+  overflow-y: auto;
 
-  .nav-header {
+  h3 {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: bold;
     margin-bottom: 1rem;
 
-    h2 {
-      font-size: 1.2rem;
-    }
-
-    .material-icons {
-      font-size: 1.5rem;
+    mat-icon {
+      margin-right: 0.5rem;
     }
   }
 
-  ul {
-    list-style: none;
-    padding: 0;
-
-    .main-item {
-      cursor: pointer;
-      padding: 0.75rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      transition: background 0.2s ease;
-
-      &.active {
-        background-color: rgba(255, 255, 255, 0.1);
-      }
-
-      .arrow {
-        font-size: 1rem;
-      }
-    }
-  }
-}
-nav {
-  background-color: #003366;
-  color: white;
-  padding: 1rem;
-
-  .nav-header {
+  .menu-item {
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.4rem;
+    border-radius: 4px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+    transition: background-color 0.3s ease;
 
-    h2 {
-      font-size: 1.2rem;
+    &:hover {
+      background-color: #0051b2;
     }
 
-    .material-icons {
-      font-size: 1.5rem;
+    &.expanded {
+      background-color: #0051b2;
+    }
+
+    mat-icon {
+      font-size: 20px;
     }
   }
 
-  ul {
+  .submenu {
     list-style: none;
-    padding: 0;
-
-    .main-item {
-      cursor: pointer;
-      padding: 0.75rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      transition: background 0.2s ease;
-
-      &.active {
-        background-color: rgba(255, 255, 255, 0.1);
-      }
-
-      .arrow {
-        font-size: 1rem;
-      }
-    }
+    margin: 0;
+    padding: 0 0 0 1.5rem;
+  
   }
 }

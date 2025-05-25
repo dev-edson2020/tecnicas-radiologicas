@@ -1,29 +1,39 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CategoryService } from '../../services/category.service';
-import { Category } from '../../models/category';
+import { TechniqueService } from '../../services/technique.service';
+import { MatIconModule } from '@angular/material/icon';
+import { Technique } from '../../models/technique.';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatIconModule],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-  categories: Category[] = [];
-  openSubmenuId: number | null = null;
+  techniquesByCategory = new Map<string, Technique[]>();
+  expandedCategory: string | null = null;
 
-  constructor(private categoryService: CategoryService) {}
+  constructor(private techniqueService: TechniqueService) {}
 
   ngOnInit(): void {
-    this.categoryService.getAll().subscribe({
-      next: (data) => this.categories = data,
-      error: (err) => console.error('Erro ao buscar categorias:', err)
+    this.techniqueService.getAll().subscribe((techniques) => {
+      techniques.forEach((tech) => {
+        const cat = tech.category?.name;
+
+        // Garantir que seja string válida
+        if (typeof cat === 'string' && cat.trim().length > 0) {
+          if (!this.techniquesByCategory.has(cat)) {
+            this.techniquesByCategory.set(cat, []);
+          }
+          this.techniquesByCategory.get(cat)!.push(tech);
+        }
+      });
     });
   }
 
-  toggleSubmenu(categoryId: number) {
-    this.openSubmenuId = this.openSubmenuId === categoryId ? null : categoryId;
+  toggleCategory(category: string): void {
+    this.expandedCategory = this.expandedCategory === category ? null : category;
   }
 }

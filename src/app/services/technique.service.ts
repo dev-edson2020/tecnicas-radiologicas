@@ -15,6 +15,10 @@ export class TechniqueService {
     return this.http.post<Technique>(this.apiUrl, technique);
   }
 
+    getAll(): Observable<Technique[]> {
+    return this.http.get<Technique[]>(this.apiUrl);
+  }
+
   getTechniques(): Observable<Technique[]> {
     return this.http.get<Technique[]>(this.apiUrl);
   }
