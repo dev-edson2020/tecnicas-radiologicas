@@ -8,7 +8,7 @@
 
     <!-- Formulário -->
     <form #techniqueForm="ngForm" (ngSubmit)="onSave(techniqueForm)" novalidate class="modal-body">
-      <div class="validation-error" *ngIf="submitted && !techniqueForm.valid">
+      <div class="validation-error" [class.visible]="submitted && techniqueForm.invalid">
         Por favor, preencha todos os campos.
       </div>
 
