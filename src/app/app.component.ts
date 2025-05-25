@@ -23,6 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
     FooterComponent,
     AddTechniqueModalComponent,
     ConfirmModalComponent,  
+    
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
@@ -36,6 +37,12 @@ export class AppComponent implements OnInit {
 
   // técnicas organizadas por categoria (string da categoria)
   techniques: { [categoryName: string]: Technique[] } = {};
+
+  techniqueSelecionada: Technique | null = null;
+
+onTecnicaSelecionada(tecnica: Technique) {
+  this.techniqueSelecionada = tecnica;
+}
 
   constructor(private techniqueService: TechniqueService) {}
 

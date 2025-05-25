@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TechniqueService } from '../../services/technique.service';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,6 +12,11 @@ import { Technique } from '../../models/technique.';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
+  @Output() tecnicaSelecionada = new EventEmitter<Technique>();
+
+selecionarTecnica(tecnica: Technique): void {
+  this.tecnicaSelecionada.emit(tecnica);
+}
   techniquesByCategory = new Map<string, Technique[]>();
   expandedCategory: string | null = null;
 

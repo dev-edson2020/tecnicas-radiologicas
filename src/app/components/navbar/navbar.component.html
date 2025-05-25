@@ -1,22 +1,21 @@
 <div class="sidebar">
-  <h3><mat-icon>add</mat-icon> Incidências</h3>
+  <h3>
+    <mat-icon></mat-icon> Incidências
+  </h3>
 
   <ng-container *ngFor="let entry of techniquesByCategory | keyvalue">
-    <div 
-      class="menu-item" 
-      (click)="toggleCategory(entry.key)"
-      [class.expanded]="expandedCategory === entry.key"
-    >
+    <div class="menu-item" (click)="toggleCategory(entry.key)" [class.expanded]="expandedCategory === entry.key">
       {{ entry.key }}
       <mat-icon>
         {{ expandedCategory === entry.key ? 'expand_less' : 'chevron_right' }}
       </mat-icon>
     </div>
 
-    <ul *ngIf="expandedCategory === entry.key" class="submenu">
-      <li *ngFor="let technique of entry.value">
-        {{ technique.name }}
-      </li>
-    </ul>
+<ul *ngIf="expandedCategory === entry.key" class="submenu">
+  <li *ngFor="let technique of entry.value" (click)="selecionarTecnica(technique)">
+    {{ technique.name }}
+  </li>
+</ul>
+
   </ng-container>
 </div>

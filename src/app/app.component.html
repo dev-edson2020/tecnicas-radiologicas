@@ -1,6 +1,10 @@
 <div class="app-container">
-  <!-- Navbar com evento que emite o id da técnica selecionada (number) -->
-  <app-navbar (techniqueSelected)="showTechnique($event)"></app-navbar>
+
+  <!-- app.component.html -->
+<app-navbar (tecnicaSelecionada)="onTecnicaSelecionada($event)"></app-navbar>
+
+<app-technique-card *ngIf="techniqueSelecionada" [technique]="techniqueSelecionada"></app-technique-card>
+
 
   <div class="main-content">
     <!-- Header com botão para abrir modal de adicionar técnica -->
