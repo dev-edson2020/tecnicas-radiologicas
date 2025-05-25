@@ -67,7 +67,7 @@ export class AppComponent implements OnInit {
     });
   }
 
- showTechnique(techniqueId: string) {
+ showTechnique(techniqueId: any) {
   const id = Number(techniqueId);
 
   for (const category in this.techniques) {

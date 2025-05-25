@@ -19,17 +19,9 @@
     </div>
   </div>
   <div class="button-group">
-    <button class="edit-btn" (click)="toggleEdit()" *ngIf="!isEditing">
-      <i class="material-icons">edit</i> Editar
-    </button>
-    <button class="save-btn" (click)="saveChanges()" *ngIf="isEditing">
-      <i class="material-icons">save</i> Salvar
-    </button>
-    <button class="cancel-btn" (click)="cancelEdit()" *ngIf="isEditing">
-      <i class="material-icons">cancel</i> Cancelar
-    </button>
-    <button class="delete-btn" (click)="deleteTechnique()">
-      <i class="material-icons">delete</i> Excluir
-    </button>
+    <button class="edit-btn" (click)="toggleEdit()" *ngIf="!isEditing">Editar</button>
+    <button class="save-btn" (click)="saveChanges()" *ngIf="isEditing">Salvar</button>
+    <button class="cancel-btn" (click)="cancelEdit()" *ngIf="isEditing">Cancelar</button>
+    <button class="delete-btn" (click)="deleteTechnique()">Excluir</button>
   </div>
 </div>

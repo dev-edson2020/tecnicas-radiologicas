@@ -11,31 +11,23 @@ import { Technique } from '../../models/technique.';
   styleUrls: ['./technique-card.component.scss']
 })
 export class TechniqueCardComponent {
-  @Output() delete = new EventEmitter<Technique>();
   @Input() technique: Technique | null = null;
+  @Output() delete = new EventEmitter<Technique>();
   @ViewChild('kVInput') kVInput!: ElementRef<HTMLInputElement>;
-  
+
   isEditing = false;
   originalValues: Partial<Technique> = {};
 
- toggleEdit() {
-  if (!this.technique) return;
-
-  if (!this.isEditing) {
-    this.originalValues = {
-      kv: this.technique.kv,
-      mas: this.technique.mas,
-      ma: this.technique.ma,
-      distance: this.technique.distance
-    };
+  toggleEdit() {
+    if (!this.technique) return;
+    if (!this.isEditing) {
+      this.originalValues = { ...this.technique };
+    }
+    this.isEditing = !this.isEditing;
+    if (this.isEditing) {
+      setTimeout(() => this.kVInput.nativeElement.focus());
+    }
   }
-  this.isEditing = !this.isEditing; // Habilita os campos
-  if (this.isEditing) {
-    setTimeout(() => {
-      this.kVInput.nativeElement.focus();
-    });
-  }
-}
 
   saveChanges() {
     this.isEditing = false;
@@ -43,10 +35,7 @@ export class TechniqueCardComponent {
 
   cancelEdit() {
     if (this.technique && this.originalValues) {
-      this.technique.kv = this.originalValues.kv || 0;
-      this.technique.mas = this.originalValues.mas || 0;
-      this.technique.ma = this.originalValues.ma || 0;
-      this.technique.distance = this.originalValues.distance || 0;
+      Object.assign(this.technique, this.originalValues);
       this.isEditing = false;
     }
   }
