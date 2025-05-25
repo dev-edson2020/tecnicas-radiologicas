@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CategoryService } from '../../services/category.service';
+import { Category } from '../../models/category';
 
 @Component({
   selector: 'app-navbar',
@@ -8,25 +10,20 @@ import { CommonModule } from '@angular/common';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent {
-  @Input() techniques: any = {
-    torax: [],
-    membros: [],
-    coluna: [],
-    cranio: [],
-    bacia: []
-  };
+export class NavbarComponent implements OnInit {
+  categories: Category[] = [];
+  openSubmenuId: number | null = null;
 
-  @Input() currentTechnique: number | null = null;
-  @Input() currentCategory: string | null = null;
+  constructor(private categoryService: CategoryService) {}
 
-  openSubmenu: keyof any | null = 'torax';
-
-  toggleSubmenu(category: keyof any) {
-    this.openSubmenu = this.openSubmenu === category ? null : category;
+  ngOnInit(): void {
+    this.categoryService.getAll().subscribe({
+      next: (data) => this.categories = data,
+      error: (err) => console.error('Erro ao buscar categorias:', err)
+    });
   }
 
-  selectTechnique(techniqueId: number) {
-    this.currentTechnique = techniqueId;
+  toggleSubmenu(categoryId: number) {
+    this.openSubmenuId = this.openSubmenuId === categoryId ? null : categoryId;
   }
 }

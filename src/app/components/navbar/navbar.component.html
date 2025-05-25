@@ -5,81 +5,16 @@
   </div>
 
   <ul>
-    <!-- Tórax -->
-    <li class="main-item" (click)="toggleSubmenu('torax')" [class.active]="openSubmenu === 'torax'">
-      <span>Tórax</span>
-      <span class="material-icons arrow">{{ openSubmenu === 'torax' ? 'expand_more' : 'chevron_right' }}</span>
-    </li>
-    <ul class="submenu" [class.open]="openSubmenu === 'torax'">
-      <li *ngFor="let tech of techniques.torax" (click)="selectTechnique(tech.id)"
-        [class.active]="currentTechnique === tech.id">
-        {{ tech.name }}
-      </li>
-    </ul>
+    <li *ngFor="let category of categories"
+        class="main-item"
+        (click)="toggleSubmenu(category.id!)"
+        [class.active]="openSubmenuId === category.id">
 
-    <!-- Membros Superiores -->
-    <li class="main-item" (click)="toggleSubmenu('membros-superiores')"
-      [class.active]="openSubmenu === 'membros-superiores'">
-      <span>Membros Superiores</span>
-      <span
-        class="material-icons arrow">{{ openSubmenu === 'membros-superiores' ? 'expand_more' : 'chevron_right' }}</span>
-    </li>
-    <ul class="submenu" [class.open]="openSubmenu === 'membros-superiores'">
-      <li *ngFor="let tech of techniques['membros-superiores']" (click)="selectTechnique(tech.id)"
-        [class.active]="currentTechnique === tech.id">
-        {{ tech.name }}
-      </li>
-    </ul>
+      <span>{{ category.name }}</span>
 
-    <!-- Continue com as outras categorias seguindo o mesmo padrão -->
-    <!-- Membros Inferiores -->
-    <li class="main-item" (click)="toggleSubmenu('membros-inferiores')"
-      [class.active]="openSubmenu === 'membros-inferiores'">
-      <span>Membros Inferiores</span>
-      <span
-        class="material-icons arrow">{{ openSubmenu === 'membros-inferiores' ? 'expand_more' : 'chevron_right' }}</span>
+      <span class="material-icons arrow">
+        {{ openSubmenuId === category.id ? 'expand_more' : 'chevron_right' }}
+      </span>
     </li>
-    <ul class="submenu" [class.open]="openSubmenu === 'membros-inferiores'">
-      <li *ngFor="let tech of techniques['membros-inferiores']" (click)="selectTechnique(tech.id)"
-        [class.active]="currentTechnique === tech.id">
-        {{ tech.name }}
-      </li>
-    </ul>
-
-    <!-- Coluna -->
-    <li class="main-item" (click)="toggleSubmenu('coluna')" [class.active]="openSubmenu === 'coluna'">
-      <span>Coluna</span>
-      <span class="material-icons arrow">{{ openSubmenu === 'coluna' ? 'expand_more' : 'chevron_right' }}</span>
-    </li>
-    <ul class="submenu" [class.open]="openSubmenu === 'coluna'">
-      <li *ngFor="let tech of techniques.coluna" (click)="selectTechnique(tech.id)"
-        [class.active]="currentTechnique === tech.id">
-        {{ tech.name }}
-      </li>
-    </ul>
-
-    <!-- Abdome -->
-    <li class="main-item" (click)="toggleSubmenu('abdome')" [class.active]="openSubmenu === 'abdome'">
-      <span>Abdome</span>
-      <span class="material-icons arrow">{{ openSubmenu === 'abdome' ? 'expand_more' : 'chevron_right' }}</span>
-    </li>
-    <ul class="submenu" [class.open]="openSubmenu === 'abdome'">
-      <li *ngFor="let tech of techniques.abdome" (click)="selectTechnique(tech.id)"
-        [class.active]="currentTechnique === tech.id">
-        {{ tech.name }}
-      </li>
-    </ul>
-
-    <!-- Bacia -->
-    <li class="main-item" (click)="toggleSubmenu('bacia')" [class.active]="openSubmenu === 'bacia'">
-      <span>Bacia</span>
-      <span class="material-icons arrow">{{ openSubmenu === 'bacia' ? 'expand_more' : 'chevron_right' }}</span>
-    </li>
-    <ul class="submenu" [class.open]="openSubmenu === 'bacia'">
-      <li *ngFor="let tech of techniques.bacia" (click)="selectTechnique(tech.id)"
-        [class.active]="currentTechnique === tech.id">
-        {{ tech.name }}
-      </li>
-    </ul>
   </ul>
 </nav>

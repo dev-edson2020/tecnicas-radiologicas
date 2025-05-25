@@ -1,35 +1,20 @@
 nav {
-  width: 280px;
-  background: rgba(0, 51, 102, 0.9);
+  background-color: #003366;
   color: white;
-  padding-top: 1.5rem;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  overflow-y: auto;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
-  z-index: 100;
+  padding: 1rem;
 
   .nav-header {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-    padding: 0 1rem;
-
-    .material-icons {
-      font-size: 30px;
-      margin-right: 10px;
-      color: #cce0ff;
-    }
+    gap: 0.5rem;
+    margin-bottom: 1rem;
 
     h2 {
-      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .material-icons {
       font-size: 1.5rem;
-      color: #cce0ff;
-      font-weight: 500;
     }
   }
 
@@ -37,49 +22,65 @@ nav {
     list-style: none;
     padding: 0;
 
-    li.main-item {
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid rgba(51, 102, 153, 0.3);
+    .main-item {
       cursor: pointer;
-      position: relative;
+      padding: 0.75rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transition: background 0.2s ease;
 
-      &:hover, &.active {
+      &.active {
         background-color: rgba(255, 255, 255, 0.1);
-        padding-left: 1.7rem;
-      }
-    }
-
-    .submenu {
-      display: none;
-      background-color: rgba(0, 89, 179, 0.2);
-      padding-left: 0;
-
-      &.open {
-        display: block;
       }
 
-      li {
-        padding: 0.8rem 1.5rem 0.8rem 2.5rem;
-        cursor: pointer;
-        font-size: 0.95rem;
-        border-left: 3px solid transparent;
-
-        &:hover {
-          background-color: rgba(255, 255, 255, 0.08);
-          border-left: 3px solid #4d9eff;
-        }
-
-        &.active {
-          background-color: rgba(255, 255, 255, 0.15);
-          border-left: 3px solid #4d9eff;
-          font-weight: 500;
-        }
+      .arrow {
+        font-size: 1rem;
       }
     }
   }
 }
+nav {
+  background-color: #003366;
+  color: white;
+  padding: 1rem;
 
+  .nav-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+
+    h2 {
+      font-size: 1.2rem;
+    }
+
+    .material-icons {
+      font-size: 1.5rem;
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    .main-item {
+      cursor: pointer;
+      padding: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transition: background 0.2s ease;
+
+      &.active {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .arrow {
+        font-size: 1rem;
+      }
+    }
+  }
+}
