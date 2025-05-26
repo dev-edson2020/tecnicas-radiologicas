@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { TechniqueService } from '../../services/technique.service';
 import { MatIconModule } from '@angular/material/icon';
 import { Technique } from '../../models/technique.';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, RouterLink],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })

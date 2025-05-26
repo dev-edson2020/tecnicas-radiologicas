@@ -532,3 +532,29 @@ footer {
     width: 100%;
   }
 }
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+
+.layout {
+  display: flex;
+  min-height: calc(100vh - 120px); // ajuste para altura do header e footer
+}
+
+.sidenav {
+  width: 250px;
+  background-color: #00264d;
+  color: white;
+  height: 100%;
+}
+
+.content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+}

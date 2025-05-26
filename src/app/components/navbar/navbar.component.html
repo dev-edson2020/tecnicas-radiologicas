@@ -13,7 +13,7 @@
 
 <ul *ngIf="expandedCategory === entry.key" class="submenu">
   <li *ngFor="let technique of entry.value" (click)="selecionarTecnica(technique)">
-    {{ technique.name }}
+     <a [routerLink]="['/tecnica', technique.id]">{{ technique.name }}</a>
   </li>
 </ul>
 
