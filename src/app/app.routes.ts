@@ -9,11 +9,11 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'tecnica/1', // ou outra técnica padrão
+    redirectTo: 'tecnica', // ou outra técnica padrão
     pathMatch: 'full',
   },
   {
     path: '**',
-    redirectTo: 'tecnica/1',
+    redirectTo: 'tecnica',
   },
 ];

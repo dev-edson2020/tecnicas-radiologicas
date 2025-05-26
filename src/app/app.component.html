@@ -1,9 +1,8 @@
 <div class="app-container">
 
   <!-- app.component.html -->
-<app-navbar (tecnicaSelecionada)="onTecnicaSelecionada($event)"></app-navbar>
+  <app-navbar (tecnicaSelecionada)="onTecnicaSelecionada($event)"></app-navbar>
 
-<app-technique-card *ngIf="techniqueSelecionada" [technique]="techniqueSelecionada"></app-technique-card>
 
 
   <div class="main-content">
@@ -12,13 +11,13 @@
 
     <!-- Exibe o card da técnica atual se existir -->
     <ng-container *ngIf="currentTechnique; else noTechnique">
-      <app-technique-card 
-        [technique]="currentTechnique"
+      <!-- <app-technique-card *ngIf="techniqueSelecionada" [technique]="techniqueSelecionada"></app-technique-card> -->
+      <app-technique-card  [technique]="techniqueSelecionada" [technique]="currentTechnique"
         (delete)="onDeleteTechnique($event)">
       </app-technique-card>
     </ng-container>
 
-    
+
 
     <!-- Mensagem caso nenhuma técnica esteja selecionada -->
     <ng-template #noTechnique>
@@ -32,17 +31,11 @@
   </div>
 
   <!-- Modal para adicionar nova técnica, exibido conforme flag -->
-  <app-add-technique-modal 
-    *ngIf="showAddModal"
-    (close)="closeAddTechniqueModal()"
-    (save)="addNewTechnique($event)">
+  <app-add-technique-modal *ngIf="showAddModal" (close)="closeAddTechniqueModal()" (save)="addNewTechnique($event)">
   </app-add-technique-modal>
 
   <!-- Modal de confirmação para exclusão -->
-  <app-confirm-modal 
-    *ngIf="showConfirmModal"
-    [message]="confirmMessage"
-    (close)="closeConfirmModal()"
+  <app-confirm-modal *ngIf="showConfirmModal" [message]="confirmMessage" (close)="closeConfirmModal()"
     (confirm)="confirmDelete()">
   </app-confirm-modal>
 </div>
