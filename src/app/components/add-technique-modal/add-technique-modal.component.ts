@@ -32,6 +32,7 @@ export class AddTechniqueModalComponent implements AfterViewInit {
 
   categories: Category[] = [];
   selectedCategoryId: number | null = null;
+  submitted = false;
 
   newTechnique: {
     name: string;
@@ -46,8 +47,6 @@ export class AddTechniqueModalComponent implements AfterViewInit {
       ma: null,
       distance: null
     };
-
-  submitted = false;
 
   constructor(
     private techniqueService: TechniqueService,
@@ -72,38 +71,37 @@ export class AddTechniqueModalComponent implements AfterViewInit {
     });
   }
 
-  onSave(form: NgForm) {
-    this.submitted = true;
+onSave(form: NgForm) {
+  this.submitted = true;
 
-    if (!form.valid) {
-      return;
-    }
-
-    const techniqueToSave: Technique = {
-      id: null,
-      name: this.newTechnique.name!.trim(),
-      kv: this.newTechnique.kv!,
-      mas: this.newTechnique.mas!,
-      ma: this.newTechnique.ma!,
-      distance: this.newTechnique.distance!,
-      category: { id: this.selectedCategoryId },
-      fullName: ''
-    };
-
-    this.techniqueService.addTechnique(techniqueToSave).subscribe({
-      next: saved => {
-        this.updateMenuService.notifyMenuUpdate();
-     
-        this.save.emit(saved);
-        this.close.emit();
-      },
-      error: err => console.error('Erro ao salvar técnica:', err)
-    });
+  // Verifica se o formulário é inválido ou se a categoria não foi selecionada
+  if (form.invalid || !this.selectedCategoryId) {
+    return;
   }
+
+  const techniqueToSave: Technique = {
+    id: null,
+    name: this.newTechnique.name!.trim(),
+    kv: this.newTechnique.kv!,
+    mas: this.newTechnique.mas!,
+    ma: this.newTechnique.ma!,
+    distance: this.newTechnique.distance!,
+    category: { id: this.selectedCategoryId },
+    fullName: ''
+  };
+
+  this.techniqueService.addTechnique(techniqueToSave).subscribe({
+    next: saved => {
+      this.updateMenuService.notifyMenuUpdate();
+      this.save.emit(saved);
+      this.close.emit();
+      this.submitted = false;
+    },
+    error: err => console.error('Erro ao salvar técnica:', err)
+  });
+}
 
   onClose() {
     this.close.emit();
   }
-
-  // Não precisamos mais desse método para template; deixamos a validação por 'form.valid'
 }
