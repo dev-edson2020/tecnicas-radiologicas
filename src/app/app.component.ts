@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -31,6 +31,7 @@ import { CategoryService } from './services/category.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+  @ViewChild('navbar') navbar!: NavbarComponent;
   currentTechnique: Technique | null = null;
   showAddModal = false;
   showConfirmModal = false;
@@ -38,10 +39,7 @@ export class AppComponent implements OnInit {
   techniqueToDelete: number | null = null; // id como number
   techniquesByCategory = new Map<string, Technique[]>();
   categories: string[] = [];
-
-  // técnicas organizadas por categoria (string da categoria)
   techniques: { [categoryName: string]: Technique[] } = {};
-
   techniqueSelecionada: Technique | null = null;
 
 onTecnicaSelecionada(tecnica: Technique) {
@@ -53,6 +51,10 @@ onTecnicaSelecionada(tecnica: Technique) {
   ngOnInit(): void {
     this.loadTechniques();
   }  
+
+    onTecnicaSalva() {
+    this.navbar.loadCategoriesAndTechniques();  
+  }
 
   loadTechniques() {
     this.techniqueService.getTechniques().subscribe((techniques: Technique[]) => {

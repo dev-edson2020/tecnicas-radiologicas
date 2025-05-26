@@ -13,6 +13,7 @@ import { TechniqueService } from '../../services/technique.service';
 import { Category } from '../../models/category';
 import { CategoryService } from '../../services/category.service';
 import { Technique } from '../../models/technique.';
+import { UpdateMenuService } from '../../services/update-menu-service';
 
 @Component({
   selector: 'app-add-technique-modal',
@@ -50,7 +51,8 @@ export class AddTechniqueModalComponent implements AfterViewInit {
 
   constructor(
     private techniqueService: TechniqueService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private updateMenuService: UpdateMenuService
   ) { }
 
   ngAfterViewInit() {
@@ -90,7 +92,8 @@ export class AddTechniqueModalComponent implements AfterViewInit {
 
     this.techniqueService.addTechnique(techniqueToSave).subscribe({
       next: saved => {
-        this.tecnicaSalva.emit();
+        this.updateMenuService.notifyMenuUpdate();
+     
         this.save.emit(saved);
         this.close.emit();
       },
