@@ -4,6 +4,8 @@ import { TechniqueService } from '../../services/technique.service';
 import { MatIconModule } from '@angular/material/icon';
 import { Technique } from '../../models/technique.';
 import { RouterLink } from '@angular/router';
+import { Category } from '../../models/category';
+import { CategoryService } from '../../services/category.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,29 +16,40 @@ import { RouterLink } from '@angular/router';
 })
 export class NavbarComponent implements OnInit {
   @Output() tecnicaSelecionada = new EventEmitter<Technique>();
+  categories: string[] = [];
 
-selecionarTecnica(tecnica: Technique): void {
-  this.tecnicaSelecionada.emit(tecnica);
-}
+  selecionarTecnica(tecnica: Technique): void {
+    this.tecnicaSelecionada.emit(tecnica);
+  }
   techniquesByCategory = new Map<string, Technique[]>();
   expandedCategory: string | null = null;
-
-  constructor(private techniqueService: TechniqueService) {}
+  constructor(private techniqueService: TechniqueService, private categoryService: CategoryService) { }
 
   ngOnInit(): void {
-    this.techniqueService.getAll().subscribe((techniques) => {
-      techniques.forEach((tech) => {
-        const cat = tech.category?.name;
+    this.categoryService.getAll().subscribe((cats: Category[]) => {
+  this.categories = cats
+    .map(c => c.name)
+    .filter((name): name is string => typeof name === 'string');
 
-        // Garantir que seja string válida
-        if (typeof cat === 'string' && cat.trim().length > 0) {
-          if (!this.techniquesByCategory.has(cat)) {
-            this.techniquesByCategory.set(cat, []);
-          }
-          this.techniquesByCategory.get(cat)!.push(tech);
+  this.techniqueService.getAll().subscribe((techniques) => {
+    techniques.forEach((tech) => {
+      const categoryName = tech.category?.name?.trim();
+      if (categoryName) {
+        if (!this.techniquesByCategory.has(categoryName)) {
+          this.techniquesByCategory.set(categoryName, []);
         }
-      });
+        this.techniquesByCategory.get(categoryName)!.push(tech);
+      }
     });
+
+    this.categories.forEach(name => {
+      if (!this.techniquesByCategory.has(name)) {
+        this.techniquesByCategory.set(name, []);
+      }
+    });
+  });
+});
+
   }
 
   toggleCategory(category: string): void {

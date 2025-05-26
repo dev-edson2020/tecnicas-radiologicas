@@ -11,11 +11,11 @@
       </mat-icon>
     </div>
 
-<ul *ngIf="expandedCategory === entry.key" class="submenu">
-  <li *ngFor="let technique of entry.value" (click)="selecionarTecnica(technique)">
-     <a [routerLink]="['/tecnica', technique.id]">{{ technique.name }}</a>
-  </li>
-</ul>
+    <ul *ngIf="expandedCategory === entry.key" class="submenu">
+      <li *ngFor="let technique of entry.value" (click)="selecionarTecnica(technique)">
+        <a [routerLink]="['/tecnica', technique.id]">{{ technique.name }}</a>
+      </li>
+    </ul>
 
   </ng-container>
 </div>
