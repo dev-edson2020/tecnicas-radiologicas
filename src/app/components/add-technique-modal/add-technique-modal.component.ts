@@ -24,6 +24,7 @@ import { Technique } from '../../models/technique.';
 export class AddTechniqueModalComponent implements AfterViewInit {
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<Technique>();
+  @Output() tecnicaSalva = new EventEmitter<void>();
 
   @ViewChild('nameInput', { static: true })
   nameInputRef!: ElementRef<HTMLInputElement>;
@@ -38,19 +39,19 @@ export class AddTechniqueModalComponent implements AfterViewInit {
     ma: number | null;
     distance: number | null;
   } = {
-    name: '',
-    kv: null,
-    mas: null,
-    ma: null,
-    distance: null
-  };
+      name: '',
+      kv: null,
+      mas: null,
+      ma: null,
+      distance: null
+    };
 
   submitted = false;
 
   constructor(
     private techniqueService: TechniqueService,
     private categoryService: CategoryService
-  ) {}
+  ) { }
 
   ngAfterViewInit() {
     setTimeout(() => this.nameInputRef.nativeElement.focus(), 0);
@@ -89,6 +90,7 @@ export class AddTechniqueModalComponent implements AfterViewInit {
 
     this.techniqueService.addTechnique(techniqueToSave).subscribe({
       next: saved => {
+        this.tecnicaSalva.emit();
         this.save.emit(saved);
         this.close.emit();
       },

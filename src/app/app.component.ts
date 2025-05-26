@@ -10,6 +10,8 @@ import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.
 import { TechniqueService } from './services/technique.service';
 import { Technique } from './models/technique.';
 import { HttpClientModule } from '@angular/common/http';
+import { Category } from './models/category';
+import { CategoryService } from './services/category.service';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -34,6 +36,8 @@ export class AppComponent implements OnInit {
   showConfirmModal = false;
   confirmMessage = '';
   techniqueToDelete: number | null = null; // id como number
+  techniquesByCategory = new Map<string, Technique[]>();
+  categories: string[] = [];
 
   // técnicas organizadas por categoria (string da categoria)
   techniques: { [categoryName: string]: Technique[] } = {};
@@ -44,11 +48,11 @@ onTecnicaSelecionada(tecnica: Technique) {
   this.techniqueSelecionada = tecnica;
 }
 
-  constructor(private techniqueService: TechniqueService) {}
+  constructor(private techniqueService: TechniqueService, private categoryService: CategoryService) {}
 
   ngOnInit(): void {
     this.loadTechniques();
-  }
+  }  
 
   loadTechniques() {
     this.techniqueService.getTechniques().subscribe((techniques: Technique[]) => {
@@ -170,4 +174,34 @@ onTecnicaSelecionada(tecnica: Technique) {
     };
     return categoryNames[categoryKey] || categoryKey;
   }
+
+  atualizarMenu() {
+  this.categoryService.getAll().subscribe((cats: Category[]) => {
+    this.categories = cats
+      .map(c => c.name)
+      .filter((name): name is string => typeof name === 'string');
+
+    this.techniquesByCategory.clear(); // Limpa antes de recarregar
+
+    this.techniqueService.getAll().subscribe((techniques) => {
+      techniques.forEach((tech) => {
+        const categoryName = tech.category?.name?.trim();
+        if (categoryName) {
+          if (!this.techniquesByCategory.has(categoryName)) {
+            this.techniquesByCategory.set(categoryName, []);
+          }
+          this.techniquesByCategory.get(categoryName)!.push(tech);
+        }
+      });
+
+      // Preenche categorias sem técnicas
+      this.categories.forEach(name => {
+        if (!this.techniquesByCategory.has(name)) {
+          this.techniquesByCategory.set(name, []);
+        }
+      });
+    });
+  });
+}
+
 }
