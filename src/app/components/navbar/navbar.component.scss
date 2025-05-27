@@ -20,8 +20,8 @@
 
   .menu-item {
     cursor: pointer;
-    padding: 0.5rem 1rem;
-    margin-bottom: 0.4rem;
+    padding: 0.3rem 0.5rem;
+    margin-bottom: 0.1rem;
     border-radius: 4px;
     display: flex;
     justify-content: space-between;
@@ -44,8 +44,7 @@
   .submenu {
     list-style: none;
     margin: 0;
-    padding: 0 0 0 1.5rem;
-  
+    padding: 0 0 0 0rem;  
   }
 }
 /* Container do submenu */
@@ -59,7 +58,7 @@ ul.submenu {
 
 /* Itens do submenu - ESTADO NORMAL */
 ul.submenu li {
-  padding: 12px 24px;
+  padding: 6px 24px;
   position: relative;
   transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   transform-origin: left center;
