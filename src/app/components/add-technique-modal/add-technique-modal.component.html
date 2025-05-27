@@ -35,22 +35,22 @@
         <div class="form-group">
           <label for="kvInput" class="input-label">kV*</label>
           <input id="kvInput" type="number" class="form-input" name="kv" [(ngModel)]="newTechnique.kv" required min="0"
-            max="9999" />
+            max="9999" placeholder="Ex: 100"/>
         </div>
         <div class="form-group">
           <label for="masInput" class="input-label">mAs*</label>
           <input id="masInput" type="number" class="form-input" name="mas" [(ngModel)]="newTechnique.mas" required
-            min="0" max="9999" />
+            min="0" max="9999" placeholder="Ex: 0,20" />
         </div>
         <div class="form-group">
           <label for="maInput" class="input-label">mA*</label>
           <input id="maInput" type="number" class="form-input" name="ma" [(ngModel)]="newTechnique.ma" required min="0"
-            max="9999" />
+            max="9999" placeholder="Ex: 200" />
         </div>
         <div class="form-group">
           <label for="distanceInput" class="input-label">Distância(cm)*</label>
           <input id="distanceInput" type="number" class="form-input" name="distance" [(ngModel)]="newTechnique.distance"
-            required min="0" max="9999" />
+            required min="0" max="9999" placeholder="Ex: 180" />
         </div>
       </div>
 
