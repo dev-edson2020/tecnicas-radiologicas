@@ -1,6 +1,6 @@
 <div class="sidebar">
   <h3>
-    <mat-icon></mat-icon> Incidências
+    <mat-icon>list_alt</mat-icon> Incidências
   </h3>
 
   <ng-container *ngFor="let entry of techniquesByCategory | keyvalue">
@@ -12,10 +12,11 @@
     </div>
 
     <ul *ngIf="expandedCategory === entry.key" class="submenu">
-      <li *ngFor="let technique of entry.value" (click)="selecionarTecnica(technique)">
+      <li *ngFor="let technique of entry.value; let i = index" 
+          (click)="selecionarTecnica(technique); setActive(i)"
+          [class.active]="activeIndex === i">
         <a [routerLink]="['/tecnica', technique.id]">{{ technique.name }}</a>
       </li>
     </ul>
-
   </ng-container>
 </div>

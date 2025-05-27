@@ -20,6 +20,7 @@ export class NavbarComponent implements OnInit {
   @Output() tecnicaSelecionada = new EventEmitter<Technique>();
   subscription = new Subscription();
   categories: string[] = [];
+  activeIndex: number | null = null;
 
   selecionarTecnica(tecnica: Technique): void {
     this.tecnicaSelecionada.emit(tecnica);
@@ -31,6 +32,11 @@ export class NavbarComponent implements OnInit {
     private updateMenuService: UpdateMenuService) { }
 
   ngOnInit(): void {
+    const savedIndex = localStorage.getItem('activeMenuIndex');
+    if (savedIndex) {
+      this.activeIndex = parseInt(savedIndex);
+    }
+
     this.loadCategoriesAndTechniques();
 
     this.subscription.add(
@@ -38,6 +44,12 @@ export class NavbarComponent implements OnInit {
         this.loadCategoriesAndTechniques();
       })
     );
+  }
+
+  setActive(index: number) {
+    this.activeIndex = index;
+    // Salva no localStorage se necessário persistência
+    localStorage.setItem('activeMenuIndex', index.toString());
   }
 
   ngOnDestroy(): void {

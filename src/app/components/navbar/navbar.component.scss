@@ -48,3 +48,91 @@
   
   }
 }
+/* Container do submenu */
+ul.submenu {
+  background-color: #002b5c;
+  padding: 0;
+  list-style: none;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* Itens do submenu - ESTADO NORMAL */
+ul.submenu li {
+  padding: 12px 24px;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transform-origin: left center;
+}
+
+/* Links - ESTADO NORMAL */
+ul.submenu li a {
+  color: #edf1f1;
+  text-decoration: none;
+  display: block;
+  font-size: 14px; /* Tamanho base */
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  z-index: 2;
+}
+
+/* Efeito HOVER - Antes de clicar */
+ul.submenu li:not(.active):hover {
+  background-color: rgba(0, 64, 140, 0.6);
+}
+
+ul.submenu li:not(.active):hover a {
+  color: #ffffff;
+  transform: translateX(8px);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+/* Barra lateral animada - HOVER */
+ul.submenu li:not(.active):hover::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: linear-gradient(to bottom, #4facfe, #00f2fe);
+  transform: scaleY(1);
+  transform-origin: center;
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+/* ESTADO ATIVO (clicado) */
+ul.submenu li.active {
+  background-color: #00408c;
+  animation: pulseActive 0.6s ease forwards;
+}
+
+ul.submenu li.active a {
+  color: #ffffff !important;
+  font-weight: 600;
+  font-size: 15px; /* Aumento proporcional de ~7% */
+  transform: translateX(8px);
+}
+
+ul.submenu li.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: linear-gradient(to bottom, #4facfe, #00f2fe);
+  animation: growBar 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+/* Animações */
+@keyframes pulseActive {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+@keyframes growBar {
+  0% { transform: scaleY(0); }
+  100% { transform: scaleY(1); }
+}

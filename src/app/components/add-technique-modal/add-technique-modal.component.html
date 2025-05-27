@@ -10,7 +10,7 @@
     <form #techniqueForm="ngForm" (ngSubmit)="onSave(techniqueForm)" novalidate class="modal-body">
       <div class="validation-error" [class.visible]="submitted && techniqueForm.invalid">
         <span class="error-icon">⚠️</span>
-        <span class="error-message">Por favor, preencha todos os campos obrigatórios.</span>
+        <span class="error-message">Por favor, preencha todos os campos.</span>
       </div>
 
       <div class="form-group">
