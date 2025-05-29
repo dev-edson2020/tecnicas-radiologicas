@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Technique } from '../models/technique';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
@@ -12,6 +12,10 @@ export class TechniqueService {
   private apiUrl = 'http://localhost:8080/api/techniques';
   private techniquesSubject = new BehaviorSubject<Technique[]>([]);
   techniques$ = this.techniquesSubject.asObservable();
+
+  // 🔔 Suporte a atualização do menu lateral
+  private menuUpdateSubject = new Subject<void>();
+  menuUpdate$ = this.menuUpdateSubject.asObservable();
 
   constructor(private http: HttpClient) {
     this.loadInitialTechniques(); // ← carrega as técnicas ao iniciar
@@ -29,19 +33,25 @@ export class TechniqueService {
       tap(created => {
         const updated = [...this.techniquesSubject.getValue(), created];
         this.techniquesSubject.next(updated);
+        this.emitMenuUpdate(); // 🔔 atualiza o menu
       })
     );
   }
 
   deleteTechnique(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+      tap(() => {
+        this.removeTechniqueFromSubject(id);
+        this.emitMenuUpdate(); // 🔔 atualiza o menu
+      })
+    );
   }
 
-removeTechniqueFromSubject(id: number): void {
-  const current = this.techniquesSubject.getValue();
-  const updated = current.filter(t => t.id !== id);
-  this.techniquesSubject.next(updated);
-}
+  removeTechniqueFromSubject(id: number): void {
+    const current = this.techniquesSubject.getValue();
+    const updated = current.filter(t => t.id !== id);
+    this.techniquesSubject.next(updated);
+  }
 
   updateTechnique(id: number, technique: Technique): Observable<Technique> {
     return this.http.put<Technique>(`${this.apiUrl}/${id}`, technique).pipe(
@@ -51,6 +61,7 @@ removeTechniqueFromSubject(id: number): void {
         if (index > -1) {
           current[index] = updatedTech;
           this.techniquesSubject.next([...current]);
+          this.emitMenuUpdate(); // 🔔 atualiza o menu
         }
       })
     );
@@ -67,5 +78,11 @@ removeTechniqueFromSubject(id: number): void {
   // Só use se quiser setar manualmente uma nova lista
   setTechniques(techniques: Technique[]) {
     this.techniquesSubject.next(techniques);
+    this.emitMenuUpdate(); // opcional, pode remover se não quiser atualizar menu ao setar
+  }
+
+  // 🔔 Método para emitir evento de atualização do menu
+  private emitMenuUpdate(): void {
+    this.menuUpdateSubject.next();
   }
 }

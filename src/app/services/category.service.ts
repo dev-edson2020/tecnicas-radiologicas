@@ -8,9 +8,9 @@ import { Category } from '../models/category';
 })
 export class CategoryService {
 
-  private apiUrl = 'http://localhost:8080/categories'; // Altere se sua URL for diferente
+  private apiUrl = 'http://localhost:8080/categories'; 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Buscar todas as categorias
   getAll(): Observable<Category[]> {
@@ -36,4 +36,9 @@ export class CategoryService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  getWithTechniques(): Observable<Category[]> {
+    return this.http.get<Category[]>(`${this.apiUrl}/with-techniques`);
+  }
+
 }

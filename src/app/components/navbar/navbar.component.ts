@@ -5,7 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { Technique } from '../../models/technique';
 import { RouterLink, ActivatedRoute } from '@angular/router';
 import { CategoryService } from '../../services/category.service';
-import { UpdateMenuService } from '../../services/update-menu-service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -30,7 +29,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor(
     private techniqueService: TechniqueService,
     private categoryService: CategoryService,
-    private updateMenuService: UpdateMenuService,
     private route: ActivatedRoute
   ) {}
 
@@ -42,8 +40,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     this.loadCategoriesAndTechniques();
 
+    // 🔁 Atualiza menu ao adicionar, editar ou excluir técnica
     this.subscription.add(
-      this.updateMenuService.menuUpdate$.subscribe(() => {
+      this.techniqueService.menuUpdate$.subscribe(() => {
         this.loadCategoriesAndTechniques();
       })
     );
@@ -56,7 +55,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
       })
     );
 
-    // Ajuste para evitar erro null: firstChild pode ser null
     if (this.route.firstChild) {
       this.subscription.add(
         this.route.firstChild.paramMap.subscribe(params => {
@@ -83,13 +81,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   loadCategoriesAndTechniques(): void {
-    this.categoryService.getAll().subscribe(cats => {
+    this.categoryService.getWithTechniques().subscribe(cats => {
       this.categories = cats.map(c => c.name).filter(name => typeof name === 'string');
 
       this.techniqueService.getAll().subscribe(techniques => {
         this.groupedTechniques = this.groupTechniquesByCategory(techniques);
 
-        // Garantir que todas as categorias estejam no mapa, mesmo sem técnicas
         this.categories.forEach(name => {
           if (!this.groupedTechniques.has(name)) {
             this.groupedTechniques.set(name, []);
