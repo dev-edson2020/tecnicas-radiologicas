@@ -1,27 +1,36 @@
-<div class="card" [class.active]="true">
-  <h3>{{ technique?.name }}</h3>
+<div *ngIf="technique" class="card active">
+  <h3>{{ technique.name }}</h3>
+
   <div class="values-container">
     <div class="value-group">
       <label>kV</label>
-      <input #kVInput type="number" [(ngModel)]="technique!.kv" [disabled]="!isEditing">
+      <input type="number" [(ngModel)]="technique.kv" [disabled]="!isEditing">
     </div>
+
     <div class="value-group">
       <label>mAs</label>
-      <input type="number" [(ngModel)]="technique!.mas" [disabled]="!isEditing">
+      <input type="number" [(ngModel)]="technique.mas" [disabled]="!isEditing">
     </div>
+
     <div class="value-group">
       <label>mA</label>
-      <input type="number" [(ngModel)]="technique!.ma" [disabled]="!isEditing">
+      <input type="number" [(ngModel)]="technique.ma" [disabled]="!isEditing">
     </div>
+
     <div class="value-group">
       <label>Distância (cm)</label>
-      <input type="number" [(ngModel)]="technique!.distance" [disabled]="!isEditing">
+      <input type="number" [(ngModel)]="technique.distance" [disabled]="!isEditing">
     </div>
   </div>
+
   <div class="button-group">
-    <button class="edit-btn" (click)="toggleEdit()" *ngIf="!isEditing">Editar</button>
-    <button class="save-btn" (click)="saveChanges()" *ngIf="isEditing">Salvar</button>
-    <button class="cancel-btn" (click)="cancelEdit()" *ngIf="isEditing">Cancelar</button>
-    <button class="delete-btn" (click)="deleteTechnique()">Excluir</button>
+    <button *ngIf="!isEditing" class="edit-btn" (click)="toggleEdit()">Editar</button>
+
+    <ng-container *ngIf="isEditing">
+      <button class="save-btn" (click)="saveChanges()">Salvar</button>
+      <button class="cancel-btn" (click)="cancelEdit()">Cancelar</button>
+    </ng-container>
+
+    <button class="delete-btn" (click)="onDelete.emit()">Excluir</button>
   </div>
 </div>

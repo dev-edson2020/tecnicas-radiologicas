@@ -12,7 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { TechniqueService } from '../../services/technique.service';
 import { Category } from '../../models/category';
 import { CategoryService } from '../../services/category.service';
-import { Technique } from '../../models/technique.';
+import { Technique } from '../../models/technique';
 import { UpdateMenuService } from '../../services/update-menu-service';
 
 @Component({
@@ -74,7 +74,6 @@ export class AddTechniqueModalComponent implements AfterViewInit {
 onSave(form: NgForm) {
   this.submitted = true;
 
-  // Verifica se o formulário é inválido ou se a categoria não foi selecionada
   if (form.invalid || !this.selectedCategoryId) {
     return;
   }
@@ -93,7 +92,7 @@ onSave(form: NgForm) {
   this.techniqueService.addTechnique(techniqueToSave).subscribe({
     next: saved => {
       this.updateMenuService.notifyMenuUpdate();
-      this.save.emit(saved);
+      this.save.emit(saved); 
       this.close.emit();
       this.submitted = false;
     },

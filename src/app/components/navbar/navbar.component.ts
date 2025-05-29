@@ -1,9 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TechniqueService } from '../../services/technique.service';
 import { MatIconModule } from '@angular/material/icon';
-import { Technique } from '../../models/technique.';
-import { RouterLink } from '@angular/router';
+import { Technique } from '../../models/technique';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { Category } from '../../models/category';
 import { CategoryService } from '../../services/category.service';
 import { UpdateMenuService } from '../../services/update-menu-service';
@@ -16,25 +16,25 @@ import { Subscription } from 'rxjs';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   @Output() tecnicaSelecionada = new EventEmitter<Technique>();
   subscription = new Subscription();
   categories: string[] = [];
-  activeIndex: number | null = null;
-
-  selecionarTecnica(tecnica: Technique): void {
-    this.tecnicaSelecionada.emit(tecnica);
-  }
   techniquesByCategory = new Map<string, Technique[]>();
   expandedCategory: string | null = null;
-  constructor(private techniqueService: TechniqueService,
+  activeTechniqueId: number | null = null;
+
+  constructor(
+    private techniqueService: TechniqueService,
     private categoryService: CategoryService,
-    private updateMenuService: UpdateMenuService) { }
+    private updateMenuService: UpdateMenuService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    const savedIndex = localStorage.getItem('activeMenuIndex');
-    if (savedIndex) {
-      this.activeIndex = parseInt(savedIndex);
+    const savedId = localStorage.getItem('activeTechniqueId');
+    if (savedId) {
+      this.activeTechniqueId = +savedId;
     }
 
     this.loadCategoriesAndTechniques();
@@ -44,16 +44,26 @@ export class NavbarComponent implements OnInit {
         this.loadCategoriesAndTechniques();
       })
     );
+
+    this.route.firstChild?.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.activeTechniqueId = +id;
+      }
+    });
   }
 
-  setActive(index: number) {
-    this.activeIndex = index;
-    // Salva no localStorage se necessário persistência
-    localStorage.setItem('activeMenuIndex', index.toString());
+  setActive(id: number): void {
+    this.activeTechniqueId = id;
+    localStorage.setItem('activeTechniqueId', id.toString());
   }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+  selecionarTecnica(tecnica: Technique): void {
+    this.tecnicaSelecionada.emit(tecnica);
+  }
+
+  toggleCategory(category: string): void {
+    this.expandedCategory = this.expandedCategory === category ? null : category;
   }
 
   loadCategoriesAndTechniques(): void {
@@ -82,7 +92,7 @@ export class NavbarComponent implements OnInit {
     });
   }
 
-  toggleCategory(category: string): void {
-    this.expandedCategory = this.expandedCategory === category ? null : category;
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

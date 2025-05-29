@@ -4,7 +4,11 @@
   </h3>
 
   <ng-container *ngFor="let entry of techniquesByCategory | keyvalue">
-    <div class="menu-item" (click)="toggleCategory(entry.key)" [class.expanded]="expandedCategory === entry.key">
+    <div 
+      class="menu-item" 
+      (click)="toggleCategory(entry.key)" 
+      [class.expanded]="expandedCategory === entry.key"
+    >
       {{ entry.key }}
       <mat-icon>
         {{ expandedCategory === entry.key ? 'expand_less' : 'chevron_right' }}
@@ -12,10 +16,12 @@
     </div>
 
     <ul *ngIf="expandedCategory === entry.key" class="submenu">
-      <li *ngFor="let technique of entry.value; let i = index" 
-          (click)="selecionarTecnica(technique); setActive(i)"
-          [class.active]="activeIndex === i">
-        <a [routerLink]="['/tecnica', technique.id]">{{ technique.name }}</a>
+      <li 
+        *ngFor="let technique of entry.value" 
+        (click)="selecionarTecnica(technique); setActive(technique.id)"
+        [class.active]="activeTechniqueId === technique.id"
+      >
+        <a [routerLink]="['/tecnicas', technique.id]">{{ technique.name }}</a>
       </li>
     </ul>
   </ng-container>

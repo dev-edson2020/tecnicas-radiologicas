@@ -6,6 +6,6 @@ export interface Technique {
   mas: number;
   ma: number;
   distance: number;
-  category: Category;
+  category?: any;
   fullName?:string;
 }

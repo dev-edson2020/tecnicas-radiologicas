@@ -1,0 +1,19 @@
+<ng-container *ngIf="isLoading; else notLoading">
+  <p>Carregando técnicas...</p>
+</ng-container>
+
+<ng-template #notLoading>
+  <ng-container *ngIf="errorMessage; else showCard">
+    <p class="error">{{ errorMessage }}</p>
+  </ng-container>
+
+  <ng-template #showCard>
+    <ng-container *ngIf="selectedTechnique; else noSelection">
+      <app-technique-card [technique]="selectedTechnique" (onDelete)="onDelete()"></app-technique-card>
+    </ng-container>
+
+    <ng-template #noSelection>
+      <p>Selecione uma técnica no menu.</p>
+    </ng-template>
+  </ng-template>
+</ng-template>

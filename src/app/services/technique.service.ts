@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Technique } from '../models/technique.';
+import { Technique } from '../models/technique';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -14,6 +14,12 @@ export class TechniqueService {
   addTechnique(technique: Technique): Observable<Technique> {
     return this.http.post<Technique>(this.apiUrl, technique);
   }
+
+  //   getAll(): Observable<Technique[]> {
+  //   console.log('Tentando carregar técnicas da API...');
+  //   return this.http.get<Technique[]>(this.apiUrl).pipe(    
+  //   );
+  // }
 
     getAll(): Observable<Technique[]> {
     return this.http.get<Technique[]>(this.apiUrl);

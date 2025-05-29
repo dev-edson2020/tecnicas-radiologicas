@@ -1,19 +1,20 @@
 import { Routes } from '@angular/router';
-import { TechniqueCardComponent } from './components/technique-card/technique-card.component';
-
+import { LayoutComponent } from './components/layout/layout.component';
+import { TechniquesPageComponent } from './pages/technique-page/technique-page.component';
 
 export const routes: Routes = [
   {
-    path: 'tecnica/:id',
-    component: TechniqueCardComponent,
-  },
-  {
     path: '',
-    redirectTo: 'tecnica', // ou outra técnica padrão
-    pathMatch: 'full',
-  },
-  {
-    path: '**',
-    redirectTo: 'tecnica',
-  },
+    component: LayoutComponent,
+    children: [
+      { 
+        path: 'tecnicas',
+        component: TechniquesPageComponent
+      },
+      {
+        path: 'tecnicas/:id',
+        component: TechniquesPageComponent 
+      }
+    ]
+  }
 ];
