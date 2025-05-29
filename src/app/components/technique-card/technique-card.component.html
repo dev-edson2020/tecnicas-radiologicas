@@ -1,25 +1,25 @@
-<div *ngIf="technique" class="card active">
-  <h3>{{ technique.name }}</h3>
+<div *ngIf="localTechnique" class="card active">
+  <h3>{{ localTechnique.name }}</h3>
 
   <div class="values-container">
     <div class="value-group">
       <label>kV</label>
-      <input type="number" [(ngModel)]="technique.kv" [disabled]="!isEditing">
+      <input type="number" [(ngModel)]="localTechnique.kv" [disabled]="!isEditing">
     </div>
 
     <div class="value-group">
       <label>mAs</label>
-      <input type="number" [(ngModel)]="technique.mas" [disabled]="!isEditing">
+      <input type="number" [(ngModel)]="localTechnique.mas" [disabled]="!isEditing">
     </div>
 
     <div class="value-group">
       <label>mA</label>
-      <input type="number" [(ngModel)]="technique.ma" [disabled]="!isEditing">
+      <input type="number" [(ngModel)]="localTechnique.ma" [disabled]="!isEditing">
     </div>
 
     <div class="value-group">
       <label>Distância (cm)</label>
-      <input type="number" [(ngModel)]="technique.distance" [disabled]="!isEditing">
+      <input type="number" [(ngModel)]="localTechnique.distance" [disabled]="!isEditing">
     </div>
   </div>
 

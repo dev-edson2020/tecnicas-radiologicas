@@ -1,7 +1,15 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Technique } from '../../models/technique';
+import { TechniqueService } from '../../services/technique.service';
 
 @Component({
   selector: 'app-technique-card',
@@ -10,23 +18,49 @@ import { Technique } from '../../models/technique';
   templateUrl: './technique-card.component.html',
   styleUrls: ['./technique-card.component.scss']
 })
-export class TechniqueCardComponent {
+export class TechniqueCardComponent implements OnChanges {
   @Input() technique!: Technique;
   @Output() onDelete = new EventEmitter<void>();
 
   isEditing = false;
+  localTechnique!: Technique;
+
+  constructor (private techniqueService: TechniqueService){}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['technique'] && this.technique) {
+      // Clona a técnica para edição local
+      this.localTechnique = { ...this.technique };
+      this.isEditing = false; // Garante que volta ao modo de visualização
+    }
+  }
 
   toggleEdit() {
     this.isEditing = true;
   }
 
   saveChanges() {
-    // Aqui você poderia emitir evento com a técnica atualizada
-    this.isEditing = false;
+    const updatedTechnique: Technique = {
+      ...this.localTechnique,
+      id: this.technique.id,
+      category: this.technique.category
+    };
+
+    this.techniqueService.updateTechnique(this.technique.id, updatedTechnique).subscribe({
+      next: updated => {
+        this.technique = updated;
+        this.localTechnique = { ...updated };
+        this.isEditing = false;
+      },
+      error: err => {
+        console.error('Erro ao atualizar técnica:', err);
+        alert('Erro ao salvar alterações. Tente novamente.');
+      }
+    });
   }
 
   cancelEdit() {
+    this.localTechnique = { ...this.technique };
     this.isEditing = false;
-    // Poderia restaurar os valores antigos se necessário
   }
 }
