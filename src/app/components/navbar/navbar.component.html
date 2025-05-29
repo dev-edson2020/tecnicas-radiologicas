@@ -3,7 +3,7 @@
     <mat-icon>list_alt</mat-icon> Incidências
   </h3>
 
-  <ng-container *ngFor="let entry of techniquesByCategory | keyvalue">
+  <ng-container *ngFor="let entry of entries">
     <div 
       class="menu-item" 
       (click)="toggleCategory(entry.key)" 

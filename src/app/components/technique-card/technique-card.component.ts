@@ -20,16 +20,16 @@ import { TechniqueService } from '../../services/technique.service';
 })
 export class TechniqueCardComponent implements OnChanges {
   @Input() technique!: Technique;
-  @Output() onDelete = new EventEmitter<void>();
+  @Output() onDelete = new EventEmitter<number>();
+
 
   isEditing = false;
   localTechnique!: Technique;
 
-  constructor (private techniqueService: TechniqueService){}
+  constructor(private techniqueService: TechniqueService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['technique'] && this.technique) {
-      // Clona a técnica para edição local
       this.localTechnique = { ...this.technique };
       this.isEditing = false; // Garante que volta ao modo de visualização
     }

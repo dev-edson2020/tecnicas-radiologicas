@@ -9,7 +9,8 @@
 
   <ng-template #showCard>
     <ng-container *ngIf="selectedTechnique; else noSelection">
-      <app-technique-card [technique]="selectedTechnique" (onDelete)="onDelete()"></app-technique-card>
+      <app-technique-card *ngIf="selectedTechnique" [technique]="selectedTechnique" (onDelete)="onDelete($event)">
+      </app-technique-card>
     </ng-container>
 
     <ng-template #noSelection>

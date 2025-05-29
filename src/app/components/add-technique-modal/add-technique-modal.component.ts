@@ -91,10 +91,9 @@ onSave(form: NgForm) {
 
   this.techniqueService.addTechnique(techniqueToSave).subscribe({
     next: saved => {
-      this.updateMenuService.notifyMenuUpdate();
       this.save.emit(saved); 
-      this.close.emit();
-      this.submitted = false;
+      this.updateMenuService.notifyMenuUpdate();
+      this.close.emit();    
     },
     error: err => console.error('Erro ao salvar técnica:', err)
   });

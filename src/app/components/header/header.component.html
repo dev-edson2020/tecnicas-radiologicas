@@ -5,12 +5,8 @@
   </button>
 </header>
 
-<!-- Seu conteúdo principal aqui -->
-
-<!-- Modal de adição de técnica -->
-<app-add-technique-modal 
+<app-add-technique-modal
   *ngIf="showAddTechniqueModal"
   (close)="closeModal()"
-  (save)="saveTechnique($event)">
+  (save)="onNovaTecnicaSalva($event)">
 </app-add-technique-modal>
-

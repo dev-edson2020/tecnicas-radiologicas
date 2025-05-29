@@ -1,6 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AddTechniqueModalComponent } from '../add-technique-modal/add-technique-modal.component';
+import { Technique } from '../../models/technique';
 
 @Component({
   selector: 'app-header',
@@ -12,20 +13,21 @@ import { AddTechniqueModalComponent } from '../add-technique-modal/add-technique
 export class HeaderComponent {
   showAddTechniqueModal = false;
 
-  // Método chamado quando clica no botão "Nova Técnica"
+  @Output() novaTecnicaSalva = new EventEmitter<Technique>();
+
+  // Abre o modal
   onAddTechnique() {
     this.showAddTechniqueModal = true;
   }
 
-  // Método para fechar o modal
+  // Fecha o modal
   closeModal() {
     this.showAddTechniqueModal = false;
   }
 
-  // Método para salvar a nova técnica
-  saveTechnique(newTechnique: any) {
-    console.log('Nova técnica adicionada:', newTechnique);
-    // Aqui você pode adicionar a lógica para salvar no seu serviço
-    this.closeModal();
+  // Recebe a técnica salva e emite para o componente pai
+  onNovaTecnicaSalva(nova: Technique) {
+    this.novaTecnicaSalva.emit(nova); // emite para o AppComponent
+    this.showAddTechniqueModal = false;
   }
 }

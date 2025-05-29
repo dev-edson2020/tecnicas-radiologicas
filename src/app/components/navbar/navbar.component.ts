@@ -4,7 +4,6 @@ import { TechniqueService } from '../../services/technique.service';
 import { MatIconModule } from '@angular/material/icon';
 import { Technique } from '../../models/technique';
 import { RouterLink, ActivatedRoute } from '@angular/router';
-import { Category } from '../../models/category';
 import { CategoryService } from '../../services/category.service';
 import { UpdateMenuService } from '../../services/update-menu-service';
 import { Subscription } from 'rxjs';
@@ -18,9 +17,13 @@ import { Subscription } from 'rxjs';
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   @Output() tecnicaSelecionada = new EventEmitter<Technique>();
-  subscription = new Subscription();
+
+  private subscription = new Subscription();
+
   categories: string[] = [];
-  techniquesByCategory = new Map<string, Technique[]>();
+  groupedTechniques: Map<string, Technique[]> = new Map();
+  entries: { key: string; value: Technique[] }[] = [];
+
   expandedCategory: string | null = null;
   activeTechniqueId: number | null = null;
 
@@ -45,12 +48,25 @@ export class NavbarComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.route.firstChild?.paramMap.subscribe(params => {
-      const id = params.get('id');
-      if (id) {
-        this.activeTechniqueId = +id;
-      }
-    });
+    this.subscription.add(
+      this.techniqueService.techniques$.subscribe(techniques => {
+        this.categories = [...new Set(techniques.map(t => t.category?.name).filter(Boolean))];
+        this.groupedTechniques = this.groupTechniquesByCategory(techniques);
+        this.updateEntries();
+      })
+    );
+
+    // Ajuste para evitar erro null: firstChild pode ser null
+    if (this.route.firstChild) {
+      this.subscription.add(
+        this.route.firstChild.paramMap.subscribe(params => {
+          const id = params.get('id');
+          if (id) {
+            this.activeTechniqueId = +id;
+          }
+        })
+      );
+    }
   }
 
   setActive(id: number): void {
@@ -67,29 +83,40 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   loadCategoriesAndTechniques(): void {
-    this.techniquesByCategory.clear();
-
     this.categoryService.getAll().subscribe(cats => {
       this.categories = cats.map(c => c.name).filter(name => typeof name === 'string');
 
       this.techniqueService.getAll().subscribe(techniques => {
-        techniques.forEach(tech => {
-          const categoryName = tech.category?.name?.trim();
-          if (categoryName) {
-            if (!this.techniquesByCategory.has(categoryName)) {
-              this.techniquesByCategory.set(categoryName, []);
-            }
-            this.techniquesByCategory.get(categoryName)!.push(tech);
+        this.groupedTechniques = this.groupTechniquesByCategory(techniques);
+
+        // Garantir que todas as categorias estejam no mapa, mesmo sem técnicas
+        this.categories.forEach(name => {
+          if (!this.groupedTechniques.has(name)) {
+            this.groupedTechniques.set(name, []);
           }
         });
 
-        this.categories.forEach(name => {
-          if (!this.techniquesByCategory.has(name)) {
-            this.techniquesByCategory.set(name, []);
-          }
-        });
+        this.updateEntries();
       });
     });
+  }
+
+  private updateEntries(): void {
+    this.entries = Array.from(this.groupedTechniques.entries()).map(([key, value]) => ({ key, value }));
+  }
+
+  private groupTechniquesByCategory(techniques: Technique[]): Map<string, Technique[]> {
+    const map = new Map<string, Technique[]>();
+    techniques.forEach(tech => {
+      const categoryName = tech.category?.name?.trim();
+      if (categoryName) {
+        if (!map.has(categoryName)) {
+          map.set(categoryName, []);
+        }
+        map.get(categoryName)!.push(tech);
+      }
+    });
+    return map;
   }
 
   ngOnDestroy(): void {

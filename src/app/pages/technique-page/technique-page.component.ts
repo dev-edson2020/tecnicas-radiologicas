@@ -1,9 +1,10 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { TechniqueCardComponent } from "../../components/technique-card/technique-card.component";
 import { Technique } from "../../models/technique";
 import { TechniqueService } from "../../services/technique.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-techniques-page',
@@ -12,77 +13,98 @@ import { TechniqueService } from "../../services/technique.service";
   templateUrl: './technique-page.component.html',
   styleUrls: ['./technique-page.component.scss']
 })
-export class TechniquesPageComponent implements OnInit {
+export class TechniquesPageComponent implements OnInit, OnDestroy {
+  private subscription = new Subscription();
+
   techniques: Technique[] = [];
   selectedTechnique: Technique | null = null;
-  isLoading = true;
   errorMessage: string | null = null;
+  categories: string[] = [];
+  isLoading = true;
 
   constructor(
     private techniqueService: TechniqueService,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.loadTechniques();
+    this.subscription.add(
+      this.techniqueService.techniques$.subscribe({
+        next: (techniques) => {
+          this.techniques = techniques;
+          this.updateCategories();
+          this.isLoading = false;
 
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      const id = params.get('id');
-      if (id) {
-        this.selectTechniqueById(+id);
-      } else if (this.techniques.length > 0) {
-        this.selectedTechnique = this.techniques[0];
-      }
-    });
+          const id = this.route.snapshot.paramMap.get('id');
+          if (id) {
+            this.selectTechniqueById(+id);
+          } else if (!this.selectedTechnique && techniques.length > 0) {
+            this.selectedTechnique = techniques[0];
+          } else if (techniques.length === 0) {
+            this.selectedTechnique = null;
+          }
+        },
+        error: (err) => {
+          console.error('Erro ao carregar técnicas:', err);
+          this.errorMessage = 'Não foi possível carregar as técnicas. Tente novamente mais tarde.';
+          this.isLoading = false;
+        }
+      })
+    );
+
+    // Observa mudança de rota (caso o id mude via navegador)
+    this.subscription.add(
+      this.route.paramMap.subscribe((params: ParamMap) => {
+        const id = params.get('id');
+        if (id) {
+          this.selectTechniqueById(+id);
+        }
+      })
+    );
   }
 
-  loadTechniques(): void {
-    this.isLoading = true;
-    this.errorMessage = null;
-
-    this.techniqueService.getAll().subscribe({
-      next: (techniques) => {
-        this.techniques = techniques;
-        // Se não tiver técnica selecionada ainda, pega a primeira
-        if (!this.selectedTechnique && techniques.length > 0) {
-          this.selectedTechnique = techniques[0];
-        }
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Erro ao carregar técnicas:', err);
-        this.errorMessage = 'Não foi possível carregar as técnicas. Tente novamente mais tarde.';
-        this.isLoading = false;
-      }
-    });
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   selectTechniqueById(id: number) {
     const tech = this.techniques.find(t => t.id === id);
-    if (tech) {
-      this.selectedTechnique = tech;
-    } else {
-      this.selectedTechnique = null;
-      // opcional: redirecionar ou mostrar mensagem
-    }
+    this.selectedTechnique = tech ?? null;
   }
 
   onTechniqueCreated(created: Technique) {
-    this.techniques.push(created);             
-    this.selectedTechnique = created;          
-    this.router.navigate(['/tecnicas', created.id]); 
+    this.selectedTechnique = created;
+    this.router.navigate(['/tecnicas', created.id]);
   }
 
-  onDelete(): void {
-    if (this.selectedTechnique) {
-      this.techniques = this.techniques.filter(t => t.id !== this.selectedTechnique!.id);
-      this.selectedTechnique = this.techniques.length > 0 ? this.techniques[0] : null;
-      if (this.selectedTechnique) {
-        this.router.navigate(['/tecnicas', this.selectedTechnique.id]);
-      } else {
-        this.router.navigate(['/tecnicas']);
+  onTechniqueSelect(technique: Technique) {
+    this.selectedTechnique = technique;
+  }
+
+  onDelete(deletedId: number): void {
+    this.techniqueService.deleteTechnique(deletedId).subscribe({
+      next: () => {
+        this.techniqueService.removeTechniqueFromSubject(deletedId);
+        const remaining = this.techniques.filter(t => t.id !== deletedId);
+
+        if (remaining.length > 0) {
+          const nextTech = remaining[0];
+          this.selectedTechnique = nextTech;
+          this.router.navigate(['/tecnicas', nextTech.id]);
+        } else {
+          this.selectedTechnique = null;
+          this.router.navigate(['/tecnicas']);
+        }
+      },
+      error: (err) => {
+        console.error('Erro ao excluir técnica:', err);
+        alert('Não foi possível excluir a técnica. Tente novamente.');
       }
-    }
+    });
+  }
+
+  updateCategories(): void {
+    this.categories = [...new Set(this.techniques.map(t => t.category))];
   }
 }
