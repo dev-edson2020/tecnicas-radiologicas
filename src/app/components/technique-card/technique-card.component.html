@@ -1,10 +1,9 @@
 <div *ngIf="localTechnique" class="card active">
   <h3>{{ localTechnique.name }}</h3>
-
   <div class="values-container">
     <div class="value-group">
       <label>kV</label>
-      <input type="number" [(ngModel)]="localTechnique.kv" [disabled]="!isEditing">
+      <input type="number" #kvInput [(ngModel)]="localTechnique.kv" [disabled]="!isEditing">
     </div>
 
     <div class="value-group">
@@ -33,4 +32,15 @@
 
     <button class="delete-btn" (click)="onDelete.emit(technique.id)">Excluir</button>
   </div>
+
+  <!-- <mat-card class="example-card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title></mat-card-title>
+    </mat-card-header>
+
+    <img mat-card-image
+      src="https://maiscursoslivres.com.br/cursos/posicionamento-radiografico--membros-superiores.webp"
+      alt="Photo of a Shiba Inu">
+  </mat-card> -->
+
 </div>

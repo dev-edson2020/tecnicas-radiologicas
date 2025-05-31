@@ -1,13 +1,13 @@
 .card {
   background: white;
   padding: 2rem;
-//   margin-bottom: 1.5rem;
-  border-radius:18px;
+  //   margin-bottom: 1.5rem;
+  border-radius: 18px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   display: none;
   border-left: 4px solid #0066cc;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  height: 285px;
+  height: 400px;
 
   &:hover {
     transform: translateY(-3px);
@@ -46,7 +46,7 @@
       font-weight: 500;
       margin-bottom: 0.5rem;
       color: #555;
-      font-size: 1rem;
+      font-size: 1.2rem;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -82,7 +82,9 @@
     display: flex;
     gap: 1rem;
     margin-top: 1.5rem;
-    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 1.6rem;
 
     button {
       padding: 0.7rem 1.5rem;
@@ -140,7 +142,36 @@
   }
 }
 
+.button-divider {
+  margin-top: 2rem;
+}
+
+.example-card {
+  width: 250px;
+  font-size: 0.875rem;
+  height: 250px;
+}
+
+mat-card-image {
+  height: 140px;
+  object-fit: cover;
+}
+
+.example-header-image {
+  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  background-size: cover;
+   width: 250px;
+  height: 250px;
+}
+
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
