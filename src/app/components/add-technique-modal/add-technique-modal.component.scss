@@ -177,14 +177,13 @@
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  padding: 0px;
+  padding: 20px;
   background-color: #f9f9f9;
   border-top: 1px solid #e0e0e0;
-  margin-top: 13px;
+  margin-top: 15px;
 }
 
 .cancel-btn {
-  margin-top: 20px;
   width: 18%;
   justify-content: center;
   background-color: #575353;
@@ -200,7 +199,6 @@
 }
 
 .add-btn {
-  margin-top: 20px;
   height: 0%;
   width: 18%;
   justify-content: center;
